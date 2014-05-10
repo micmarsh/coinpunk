@@ -46,14 +46,14 @@ coinpunk.controllers.Accounts.prototype.signin = function() {
     } else if(response.result == 'authCodeNeeded') {
       errorDiv.removeClass('hidden');
       errorDiv.text(response.message);
-      $('#signinPassword').after('
-        <div class="form-group">
-          <label for="authCode" class="col-lg-2 control-label">Auth Code</label>
-          <div class="col-lg-4">
-            <input id="authCode" type="password" class="form-control" placeholder="">
-          </div>
-        </div>
-      ');
+      $('#signinPassword').after(
+        '<div class="form-group">'+
+          '<label for="authCode" class="col-lg-2 control-label">Auth Code</label>'+
+          '<div class="col-lg-4">'+
+            '<input id="authCode" type="password" class="form-control" placeholder="">'+
+          '</div>'+
+        '</div>'
+      );
       $('#authCode').focus();
       coinpunk.usingAuthKey = true;
 
@@ -324,17 +324,17 @@ $('body').on('click', '#generateAuthQR', function() {
     authURI.setSearch({issuer: 'Coinpunk', secret: resp.key});
 
     new QRCode(document.getElementById('authQR'), authURI.toString());
-    $('#authQR').after('
-      <form role="form" id="submitAuth">
-        <p>Enter code shown on Google Authenticator:</p>
-        <input type="hidden" id="authKeyValue" value="'+resp.key+'">
-        <div class="form-group">
-          <label for="confirmAuthCode">Confirm Auth Code</label>
-          <input class="form-control" type="text" id="confirmAuthCode" autocorrect="off" autocomplete="off">
-        </div>
-        <button type="submit" class="btn btn-primary">Confirm</button>
-      </form>
-    ');
+    $('#authQR').after(
+      '<form role="form" id="submitAuth">'+
+        '<p>Enter code shown on Google Authenticator:</p>'+
+        '<input type="hidden" id="authKeyValue" value="'+resp.key+'">'+
+        '<div class="form-group">'+
+          '<label for="confirmAuthCode">Confirm Auth Code</label>'+
+          '<input class="form-control" type="text" id="confirmAuthCode" autocorrect="off" autocomplete="off">'+
+        '</div>'+
+        '<button type="submit" class="btn btn-primary">Confirm</button>'+
+      '</form>'
+    );
     $('#confirmAuthCode').focus();
   });
 });
