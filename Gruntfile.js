@@ -3,30 +3,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.initConfig({
-    shell: {
-      browserify: {
-        options: {
-          stdout: true
-        },
-        command: './node_modules/browserify/bin/cmd.js -r ./lib/bitcoinjs/index.js | ./node_modules/.bin/uglifyjs > public/js/lib/bitcoinjs.js'
-      },
-      minifycss: {
-        options: {
-          stdout: true
-        },
-        command: 'cat public/css/bootstrap.css public/css/font-awesome.css public/css/fonts.css | ./node_modules/.bin/cleancss -o public/css/all.css'
-      }
-    },
-
-    uglify: {
-      coinpunk: {
-        options: {
-          "beautify": false,
-          "screw-ie8": true
-        },
-        files: {
-          'public/js/all.js': [
+  var allFiles = [
             'public/js/lib/jquery.js',
             'public/js/lib/bootstrap.js',
             'public/js/lib/underscore.js',
@@ -70,6 +47,37 @@ module.exports = function(grunt) {
             'public/js/coinpunk/pricing.js',
             'public/js/coinpunk/router.js'
           ]
+
+  grunt.initConfig({
+    shell: {
+      browserify: {
+        options: {
+          stdout: true
+        },
+        command: './node_modules/browserify/bin/cmd.js -r ./lib/bitcoinjs/index.js | ./node_modules/.bin/uglifyjs > public/js/lib/bitcoinjs.js'
+      },
+      minifycss: {
+        options: {
+          stdout: true
+        },
+        command: 'cat public/css/bootstrap.css public/css/font-awesome.css public/css/fonts.css | ./node_modules/.bin/cleancss -o public/css/all.css'
+      },
+      copy: {
+        options: {
+          stdout: true
+        },
+        command: 'cat ' + allFiles.join(' ') + ' > public/js/all.js'
+      }
+    },
+
+    uglify: {
+      coinpunk: {
+        options: {
+          "beautify": false,
+          "screw-ie8": true
+        },
+        files: {
+          'public/js/all.js': ['public/js/all.js']
         }
       }
     },
@@ -88,6 +96,6 @@ module.exports = function(grunt) {
   grunt.event.on('watch', function(action, filepath) {
     grunt.config(['uglify'], filepath);
   });
-
-  grunt.registerTask('default', ['shell', 'uglify']);
+  grunt.registerTask('default', ['shell']);
+  grunt.registerTask('production', ['shell', 'uglify']);
 };
